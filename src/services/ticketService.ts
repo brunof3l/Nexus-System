@@ -61,19 +61,31 @@ export const ticketService = {
           .order('created_at', { ascending: false });
         
         if (error) throw error;
-        return data as Ticket[];
+        return (data || []) as Ticket[];
       }
     } catch (error) {
       console.warn('Supabase error or not configured, using LocalStorage', error);
     }
 
-    const stored = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY) || '[]');
-    // Sort by id descending (simulating DB behavior)
-    return stored.sort((a: Ticket, b: Ticket) => {
-        if (a.id > b.id) return -1;
-        if (a.id < b.id) return 1;
-        return 0;
-    });
+    try {
+        const storedItem = localStorage.getItem(LOCAL_STORAGE_KEY);
+        const stored = storedItem ? JSON.parse(storedItem) : [];
+        
+        if (!Array.isArray(stored)) {
+            console.warn('LocalStorage data is not an array, resetting');
+            return [];
+        }
+
+        // Sort by id descending (simulating DB behavior)
+        return stored.sort((a: Ticket, b: Ticket) => {
+            if ((a.id || '') > (b.id || '')) return -1;
+            if ((a.id || '') < (b.id || '')) return 1;
+            return 0;
+        });
+    } catch (e) {
+        console.error('Error parsing tickets from LocalStorage', e);
+        return [];
+    }
   },
 
   async updateTicketStatus(id: string, newStatus: TicketStatus): Promise<void> {

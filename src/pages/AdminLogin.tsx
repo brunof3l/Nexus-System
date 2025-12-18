@@ -1,59 +1,73 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Lock, ShieldCheck } from 'lucide-react';
+import React, { useState } from 'react';
+import { useNavigate, Link } from 'react-router-dom';
+import { Lock, ShieldCheck, ArrowLeft } from 'lucide-react';
+import { Card } from '../components/ui/Card';
+import { Input } from '../components/ui/Input';
+import { Button } from '../components/ui/Button';
 
 export function AdminLogin() {
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    if (password === 'admin123') {
-      localStorage.setItem('admin_auth', 'true');
-      navigate('/admin/dashboard');
-    } else {
-      alert('Senha incorreta');
-    }
+    setLoading(true);
+    
+    // Simulate API call
+    setTimeout(() => {
+        if (password === 'admin123') {
+        localStorage.setItem('admin_auth', 'true');
+        navigate('/admin/dashboard');
+        } else {
+        alert('Senha incorreta');
+        setLoading(false);
+        }
+    }, 800);
   };
 
   return (
-    <div className="flex items-center justify-center py-20 animate-fade-in">
-      <div className="bg-slate-900 p-8 rounded-2xl shadow-2xl border border-slate-800 w-full max-w-md">
+    <div className="min-h-screen bg-[#0B1120] flex items-center justify-center p-4">
+      <div className="absolute top-6 left-6">
+        <Link to="/" className="text-slate-400 hover:text-white flex items-center gap-2 transition-colors text-sm font-medium">
+            <ArrowLeft className="w-4 h-4" /> Voltar ao Início
+        </Link>
+      </div>
+
+      <Card className="w-full max-w-md p-8 bg-[#1e293b]/70 backdrop-blur-xl border-white/10">
         <div className="flex justify-center mb-8">
-          <div className="bg-indigo-500/10 p-4 rounded-full border border-indigo-500/20">
-            <ShieldCheck className="w-10 h-10 text-indigo-400" />
+          <div className="bg-indigo-500/10 p-4 rounded-full border border-indigo-500/20 shadow-[0_0_15px_rgba(99,102,241,0.3)]">
+            <ShieldCheck className="w-12 h-12 text-indigo-400" />
           </div>
         </div>
         
-        <h1 className="text-2xl font-bold mb-3 text-center text-white tracking-tight">Acesso Restrito</h1>
-        <p className="text-slate-400 text-center mb-8 text-sm">
-          Área exclusiva para técnicos e administradores do Nexus.
-        </p>
+        <div className="text-center mb-8">
+            <h1 className="text-2xl font-bold text-white mb-2">Acesso Administrativo</h1>
+            <p className="text-slate-400 text-sm">
+            Entre com suas credenciais para acessar o painel.
+            </p>
+        </div>
         
         <form onSubmit={handleLogin} className="space-y-6">
-          <div>
-            <label className="block text-sm font-medium text-slate-400 mb-2">Chave de Acesso</label>
-            <div className="relative">
-              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                <Lock className="h-5 w-5 text-slate-500" />
-              </div>
-              <input
-                type="password"
-                className="block w-full pl-10 rounded-xl bg-slate-950 border-slate-800 text-white placeholder-slate-600 focus:border-indigo-500 focus:ring-indigo-500/50 py-3 transition-colors"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                placeholder="••••••••"
-              />
-            </div>
-          </div>
-          <button
-            type="submit"
-            className="w-full flex justify-center py-3.5 px-4 border border-transparent rounded-xl shadow-lg shadow-indigo-900/20 text-sm font-bold text-white bg-indigo-600 hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-slate-900 focus:ring-indigo-500 transition-all transform hover:-translate-y-0.5 active:translate-y-0"
+          <Input 
+            label="Chave de Acesso"
+            type="password"
+            placeholder="••••••••"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            icon={<Lock className="w-5 h-5" />}
+            className="bg-[#0f172a]/50 border-white/5 focus:border-indigo-400"
+          />
+
+          <Button 
+            type="submit" 
+            className="w-full py-6 text-lg bg-indigo-600 hover:bg-indigo-500"
+            isLoading={loading}
           >
-            Autenticar
-          </button>
+            Entrar no Sistema
+          </Button>
         </form>
-      </div>
+      </Card>
     </div>
   );
 }
