@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { ticketService } from '../services/ticketService';
+import { supabase } from '../lib/supabase';
 import type { Ticket, TicketStatus } from '../types';
-import { Search, Filter, Trash2 } from 'lucide-react';
+import { Search, Filter, Trash2, UserCheck } from 'lucide-react';
 import { Card } from '../components/ui/Card';
 import { Badge } from '../components/ui/Badge';
 import { Button } from '../components/ui/Button';
@@ -153,6 +154,17 @@ export function AdminTickets() {
                         </div>
                       </td>
                       <td className="px-6 py-4 text-right">
+                        {ticket.status === 'Aberto' && (
+                            <Button 
+                                variant="ghost" 
+                                size="sm"
+                                onClick={() => claimTicket(ticket.id)}
+                                className="text-sky-400 hover:text-sky-300 hover:bg-sky-900/20 mr-1"
+                                title="Assumir Chamado"
+                            >
+                                <UserCheck className="w-4 h-4" />
+                            </Button>
+                        )}
                         <Button 
                           variant="ghost" 
                           size="sm"

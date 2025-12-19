@@ -16,8 +16,9 @@ export function AdminLogin() {
     
     // Simulate API call
     setTimeout(() => {
-        if (password === 'admin123') {
+        if (password === '84524656') {
         localStorage.setItem('admin_auth', 'true');
+        localStorage.setItem('admin_name', 'Técnico João');
         navigate('/admin/dashboard');
         } else {
         alert('Senha incorreta');

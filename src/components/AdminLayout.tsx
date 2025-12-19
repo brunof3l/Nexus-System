@@ -36,8 +36,11 @@ export function AdminLayout({ children }: { children: ReactNode }) {
         "fixed md:static inset-y-0 left-0 z-50 w-64 bg-[#161F32] border-r border-slate-800 transform transition-transform duration-200 ease-in-out md:translate-x-0 flex flex-col",
         isSidebarOpen ? "translate-x-0" : "-translate-x-full"
       )}>
-        <div className="h-20 flex items-center px-6 border-b border-slate-800">
+        <div className="h-24 flex flex-col justify-center px-6 border-b border-slate-800">
            <span className="text-xl font-bold text-white tracking-tight">NEXUS <span className="text-indigo-500">ADMIN</span></span>
+           <p className="text-sm text-slate-400 mt-1">
+             Logado como: <span className="text-white font-bold">{localStorage.getItem('admin_name') || 'Técnico'}</span>
+           </p>
         </div>
 
         <nav className="flex-1 p-4 space-y-1">
